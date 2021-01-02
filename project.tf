@@ -53,11 +53,13 @@ resource "google_billing_budget" "budget" {
   depends_on = [google_pubsub_topic.my_topic]
 }
 
+/*
 resource "google_service_account" "service_account" {
   account_id   = var.service_account_id
   display_name = var.service_account_name
   project = var.terraform_project_id
 }
+*/
 
 
 resource "google_storage_bucket" "bucket" {
@@ -80,7 +82,10 @@ resource "google_cloudfunctions_function" "function" {
   available_memory_mb   = var.function_available_memory_mb
   source_archive_bucket = google_storage_bucket.bucket.name
   source_archive_object = google_storage_bucket_object.archive.name
-  trigger_http          = var.function_trigger_http
+  event_trigger {
+    event_type = "google.pubsub.topic.publish"
+    resource   = var.budget_pubsub_topic
+  }
   timeout               = var.function_timeout
   entry_point           = var.function_entry_point
 
