@@ -1,3 +1,8 @@
+provider "google" {
+  region  = "us-central1"
+  zone    = "us-central1-c"
+}
+
 resource "google_project" "my_project" {
   name       = var.project_name
   project_id = "${var.project_id}-${random_string.random.result}"
@@ -49,16 +54,17 @@ resource "google_billing_budget" "budget" {
 }
 
 resource "google_service_account" "service_account" {
-  account_id   = var.service_account
+  account_id   = var.service_account_id
   display_name = var.service_account_name
   project = var.terraform_project_id
 }
 
+
 resource "google_storage_bucket" "bucket" {
   name = var.bucket_name
+  project = var.terraform_project_id
 }
 
-/* 
 resource "google_storage_bucket_object" "archive" {
   name   = var.function_code_filename
   bucket = google_storage_bucket.bucket.name
@@ -66,6 +72,7 @@ resource "google_storage_bucket_object" "archive" {
 }
 
 resource "google_cloudfunctions_function" "function" {
+  project     = var.terraform_project_id
   name        = var.function_name
   description = var.function_description
   runtime     = var.function_runtime
@@ -82,6 +89,7 @@ resource "google_cloudfunctions_function" "function" {
   // }
 }
 
+/*
 resource "google_cloudfunctions_function_iam_member" "invoker" {
   project        = google_cloudfunctions_function.function.project
   region         = google_cloudfunctions_function.function.region
@@ -89,5 +97,4 @@ resource "google_cloudfunctions_function_iam_member" "invoker" {
 
   role   = var.function_iam_role
   member = "serviceAccount:${google_service_account.service_account}"
-}
-*/
+}*/
