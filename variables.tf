@@ -29,12 +29,6 @@ variable "project_id" {
 variable "org_id" {
 }
 
-variable "service_account_id" {
-}
-
-variable "service_account_name" {
-}
-
 variable "bucket_name" {
 }
 
@@ -66,4 +60,7 @@ variable "function_entry_point" {
 }
 
 variable "function_iam_role" {
+}
+
+variable "function_service_account_email" {
 }

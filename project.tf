@@ -69,7 +69,7 @@ resource "google_cloudfunctions_function" "function" {
   name        = var.function_name
   description = var.function_description
   runtime     = var.function_runtime
-
+  service_account_email = var.function_service_account_email
   available_memory_mb   = var.function_available_memory_mb
   source_archive_bucket = google_storage_bucket.bucket.name
   source_archive_object = google_storage_bucket_object.archive.name
@@ -79,10 +79,9 @@ resource "google_cloudfunctions_function" "function" {
   }
   timeout               = var.function_timeout
   entry_point           = var.function_entry_point
-
-  // environment_variables = {
-    // MY_ENV_VAR = "my-env-var-value"
-  // }
+  environment_variables = {
+    PROJECT_ID = google_project.my_project.project_id
+  }
 
   depends_on = [google_pubsub_topic.my_topic]
 }
