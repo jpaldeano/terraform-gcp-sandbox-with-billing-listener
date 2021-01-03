@@ -53,15 +53,6 @@ resource "google_billing_budget" "budget" {
   depends_on = [google_pubsub_topic.my_topic]
 }
 
-/*
-resource "google_service_account" "service_account" {
-  account_id   = var.service_account_id
-  display_name = var.service_account_name
-  project = var.terraform_project_id
-}
-*/
-
-
 resource "google_storage_bucket" "bucket" {
   name = var.bucket_name
   project = var.terraform_project_id
@@ -92,14 +83,6 @@ resource "google_cloudfunctions_function" "function" {
   // environment_variables = {
     // MY_ENV_VAR = "my-env-var-value"
   // }
+
+  depends_on = [google_pubsub_topic.my_topic]
 }
-
-/*
-resource "google_cloudfunctions_function_iam_member" "invoker" {
-  project        = google_cloudfunctions_function.function.project
-  region         = google_cloudfunctions_function.function.region
-  cloud_function = google_cloudfunctions_function.function.name
-
-  role   = var.function_iam_role
-  member = "serviceAccount:${google_service_account.service_account}"
-}*/
